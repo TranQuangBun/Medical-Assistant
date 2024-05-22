@@ -25,7 +25,7 @@ def verify_credentials(email, password):
     return user
 
 def get_news():
-    mycursor.execute('SELECT title, content, image_url FROM news')
+    mycursor.execute('SELECT title, content, image_url,link FROM news')
     news_data = mycursor.fetchall()
     return news_data
 
