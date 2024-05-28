@@ -1,6 +1,10 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 from database import query
+import pickle
+
+#def load_model():
+   # with open('')
 def app():
     st.title('Bạn đang dự đoán :red[THIẾU MÁU] 🩸')
     # Chia trang web thành hai cột

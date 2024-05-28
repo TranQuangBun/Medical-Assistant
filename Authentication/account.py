@@ -17,7 +17,24 @@ def app():
         if st.button('Đăng nhập'):
             user = query.verify_credentials(email, password)
             if user:
-                st.success(f"Welcome {user['name']}!")
+                # Lưu thông tin người dùng vào session state
+                st.session_state.user_data = user
+                st.session_state.logged_in = True
+                user_data = st.session_state.user_data
+                with st.expander("Thông tin của bạn"):
+                    marks1, marks2, marks3 = st.columns(3, gap='large')
+                    with marks1:
+                        st.info('Người dùng', icon="👤")
+                        st.metric(label=user_data['name'], value='')
+                    with marks2:
+                        st.info('Số điện thoại', icon="📞")
+                        st.metric(label=user_data['phone'], value='')
+                    with marks3:
+                        st.info('Số lần test', icon="🧪")
+                    #   st.metric(label=user_data['test_count'], value='')
+
+                st.markdown("""---""")
+
             else:
                 st.markdown("""
                        <style>
@@ -62,6 +79,6 @@ def app():
                   </style>
                   <div class="success-box">
                       <h4>🎉 Success!</h4>
-                      <p>Your account has been created successfully. You can now log in with your new account.</p>
+                      <p>Tài khoản của bạn đã được tạo thành công. Bây giờ bạn có thể đăng nhập bằng tài khoản mới của mình.</p>
                   </div>
               """, unsafe_allow_html=True)

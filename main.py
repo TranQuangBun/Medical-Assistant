@@ -4,6 +4,8 @@ import pandas as pandas
 import plotly.express as px
 from streamlit_option_menu import  option_menu
 from PIL import Image
+
+import home2
 from database import query
 
 import home
@@ -18,8 +20,6 @@ logo = Image.open("Image/logo.png")
 st.markdown("##")
 #side bar
 st.sidebar.image("Image/logo.png")
-
-
 
 # Tạo sidebar với button
 def run():
