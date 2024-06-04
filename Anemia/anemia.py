@@ -25,7 +25,7 @@ def app():
         input10 = st.text_input(":green[10 - MCHC  ]")
         input11 = st.text_input(":green[11 - RDW  ] ")
         input12 = st.text_input(":green[12 - PLT  ] ")
-        input13 = st.text_input(":green[12 - MPV  ] ")
+        input13 = st.text_input(":green[13 - MPV  ] ")
 
     # Bên phải: layout hình chữ nhật với chú thích
     with col2:

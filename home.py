@@ -8,22 +8,33 @@ from PIL import Image
 
 news = query.get_news()
 data = query.view_all_data()
+css = """
+<style>
+.image-container {
+  display: flex;
+  justify-content: center;
+}
+</style>
+"""
 def Mark():
     st.title('Chào mừng bạn đến :red[BLOOD TEST 🩸]')
   # account.app()
-    with st.expander("Thông tin của bạn"):
-       marks1,marks2,marks3 =st.columns(3,gap='large')
-       with marks1:
-           st.info('Người dùng',icon="👤")
-          # st.metric(label="#", value=user_data)
-       with marks2:
-           st.info('Số điện thoại',icon="📞")
-          # st.metric(label="#", value=user_data)
-       with marks3:
-           st.info('Số lần test',icon="🧪")
-         #  st.metric(label="#", value=user_data)
+    with st.expander("CÁC BỆNH CHÚNG TÔI CÓ THỂ DỰ ĐOÁN"):
+        marks1, marks2 = st.columns(2, gap='large')
+        with marks1:
+            st.info(':red[Phát hiện thiếu máu]', icon="🩸")
+            st.image('Image/thieumau.jpg', width=300)
+        with marks2:
+            st.info(':red[Đánh giá nguy cơ COVID-19]', icon="🦠")
+            st.image('Image/covid.jpg', width=300)
+    st.info(":green[Đối tượng sử dụng :]"
+               " Trang web này hướng đến những người muốn theo dõi sức khỏe của bản thân, đặc biệt là những người có nguy cơ mắc thiếu máu hoặc COVID-19.\n")
+    st.info(":green[Lợi ích:]"
+               " Giúp phát hiện sớm các bệnh lý nguy hiểm."
+               " Theo dõi sức khỏe một cách hiệu quả."
+               " Tiết kiệm thời gian và chi phí.")
 
-       st.markdown("""---""")
+    st.info("👉 Hãy truy cập trang web của chúng tôi để phân tích bảng xét nghiệm máu toàn phần và bảo vệ sức khỏe của bạn!")
 
     # Chia thành hai cột
 
@@ -99,7 +110,6 @@ def Mark():
         # Gọi hàm plot_non_diseased và plot_diseased để vẽ hai biểu đồ riêng biệt
         st.header('Người không mắc bệnh')
         plot_non_diseased(df_non_diseased)
-
         st.header('Người bị bệnh')
         plot_diseased(df_diseased)
     # Cột bên trái

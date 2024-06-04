@@ -13,14 +13,15 @@ def app():
         input2 = st.text_input(":green[2 - NEUT] ")
         input3 = st.text_input(":green[3 - MON] ")
         input4 = st.text_input(":green[4 - EOS] ")
-        input5 = st.text_input(":green[5 - HBG ] ")
-        input6 = st.text_input(":green[6 - HCT ]")
-        input7 = st.text_input(":green[7 - MCV] ")
-        input8 = st.text_input(":green[8 - MCH ]")
-        input9 = st.text_input(":green[9 - MCHC ]")
-        input10 = st.text_input(":green[10 - RDW ]")
-        input11 = st.text_input(":green[11 - PLT ] ")
-        input12 = st.text_input(":green[12 - MPV ] ")
+        input5 = st.text_input(":green[5 - BASO ] ")
+        input6 = st.text_input(":green[6 - HBG  ]")
+        input7 = st.text_input(":green[7 - HCT ] ")
+        input8 = st.text_input(":green[8 - MCV  ]")
+        input9 = st.text_input(":green[9 - MCH ]")
+        input10 = st.text_input(":green[10 - MCHC  ]")
+        input11 = st.text_input(":green[11 - RDW  ] ")
+        input12 = st.text_input(":green[12 - PLT  ] ")
+        input13 = st.text_input(":green[13 - MPV  ] ")
 
 
     # Bên phải: layout hình chữ nhật với chú thích
@@ -55,4 +56,6 @@ def app():
 
     with predict_button:
         if st.button("Dự đoán bệnh"):
-            st.write("Button was clicked!")
+            query.insert_covid19(input1,input2,input3,input4,input5,input6,input7,input8,input9,input10,input11,input12,input13)
+
+# con thieu column diseased

@@ -37,8 +37,16 @@ def insert_feedback(name, phone, selected_progress, feedback, satisfaction_level
         cursor.execute(sql_query, record)
         connection.commit()
         print("Feedback inserted successfully")
-
-
+def insert_covid19(LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV,diseased):
+    connection = conn
+    if connection:
+        cursor = connection.cursor()
+        sql_query = """INSERT INTO covid_test_results (LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV)
+                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        record = (LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV)
+        cursor.execute(sql_query, record)
+        connection.commit()
+        print("covid19 inserted successfully")
 def view_all_data():
     mycursor.execute('SELECT pcr_date,pcr FROM `covid_blood` ORDER BY `ID` ASC')
     data = mycursor.fetchall()

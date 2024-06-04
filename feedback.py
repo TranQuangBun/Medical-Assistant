@@ -17,7 +17,9 @@ def app():
         satisfaction_level_options = ["Dự đoán chính xác", "Dự đoán không chính xác"]
         satisfaction_level = st.radio("Mức độ hài lòng:", options=satisfaction_level_options)
         if st.button("Gửi phản hồi"):
+
             query.insert_feedback(name, phone, selected_progress, feedback, satisfaction_level)
+
             st.markdown("""
                         <style>
                         .success-box {
