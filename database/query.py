@@ -27,13 +27,13 @@ def get_news():
     mycursor.execute('SELECT title, content, image_url,link FROM news')
     news_data = mycursor.fetchall()
     return news_data
-def insert_feedback(name, phone, selected_progress, feedback, satisfaction_level):
+def insert_feedback(selected_progress, feedback, satisfaction_level):
     connection = conn
     if connection:
         cursor = connection.cursor()
-        sql_query = """INSERT INTO feedback (name, phone, selected_progress, feedback, satisfaction_level) 
-                                VALUES (%s, %s, %s, %s, %s)"""
-        record = (name, phone, selected_progress, feedback, satisfaction_level)
+        sql_query = """INSERT INTO feedback (selected_progress, feedback, satisfaction_level) 
+                                VALUES (%s, %s, %s)"""
+        record = (selected_progress, feedback, satisfaction_level)
         cursor.execute(sql_query, record)
         connection.commit()
         print("Feedback inserted successfully")
@@ -47,6 +47,16 @@ def insert_covid19(LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV,d
         cursor.execute(sql_query, record)
         connection.commit()
         print("covid19 inserted successfully")
+def insert_anemia(LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV,RBC,WBC,diseased):
+    connection = conn
+    if connection:
+        cursor = connection.cursor()
+        sql_query = """INSERT INTO anemia_test_results (LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV,RBC,WBC,diseased)
+                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        record = (LYM, NEUT, MONO, EOS, BASO,HGB,HCT,MCV,MCH,MCHC,RDW,PLT,MPV,RBC,WBC,diseased)
+        cursor.execute(sql_query, record)
+        connection.commit()
+        print("Anemia inserted successfully")
 def view_all_data():
     mycursor.execute('SELECT pcr_date,pcr FROM `covid_blood` ORDER BY `ID` ASC')
     data = mycursor.fetchall()

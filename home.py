@@ -17,6 +17,7 @@ css = """
 </style>
 """
 def Mark():
+
     st.title('Chào mừng bạn đến :red[BLOOD TEST 🩸]')
   # account.app()
     with st.expander("CÁC BỆNH CHÚNG TÔI CÓ THỂ DỰ ĐOÁN"):

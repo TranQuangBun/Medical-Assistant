@@ -4,10 +4,22 @@ import streamlit as st
 
 from database import query
 def app():
+    if st.session_state.logged_in:
+        user_data = st.session_state.user_data
+        with st.expander("Thông tin của bạn"):
+            marks1, marks2, marks3 = st.columns(3, gap='large')
+            with marks1:
+                st.info('Người dùng', icon="👤")
+                st.metric(label=user_data['name'], value='')
+            with marks2:
+                st.info('Số điện thoại', icon="📞")
+                st.metric(label=user_data['phone'], value='')
+            with marks3:
+                st.info('Số lần test', icon="🧪")
+            #   st.metric(label=user_data['test_count'], value='')
+
         progress = ["Covid19", "Thiếu máu"]
         st.title(':red[Gửi phản hồi cho chúng tôi]  💖')
-        name = st.text_input("Họ và tên:")
-        phone = st.text_input("Số điện thoại:")
         selected_progress = st.selectbox("Bệnh đã dự đoán:", progress)
         feedback = st.text_area("Phản hồi:")
 
@@ -18,7 +30,7 @@ def app():
         satisfaction_level = st.radio("Mức độ hài lòng:", options=satisfaction_level_options)
         if st.button("Gửi phản hồi"):
 
-            query.insert_feedback(name, phone, selected_progress, feedback, satisfaction_level)
+            query.insert_feedback(selected_progress, feedback, satisfaction_level)
 
             st.markdown("""
                         <style>

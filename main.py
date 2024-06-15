@@ -4,9 +4,9 @@ import pandas as pandas
 import plotly.express as px
 from streamlit_option_menu import  option_menu
 from PIL import Image
-
+from Diabetes import diabetes
 from database import query
-
+from recommend import medicine
 import home
 from covid19 import covid19
 from Anemia import anemia
@@ -26,7 +26,7 @@ def run():
     with st.sidebar:
         app = option_menu(
             menu_title='MENU',
-            options=['Home', 'Account', 'Blood', 'Covid19',"Feedback"],
+            options=['Home','Account','Medicine Recommend','Diabetes', 'Blood', 'Covid19',"Feedback"],
             icons=['house-fill', 'person-circle','file-earmark-medical-fill','file-medical-fill','clipboard-heart-fill'],
             menu_icon='chat-text-fill',
             default_index=0,
@@ -35,8 +35,10 @@ def run():
         )
     if app == "Home":
         home.Mark()
-    if app == "Account":
-        account.app()
+    if app == "Medicine Recommend":
+        medicine.app()
+    if app == "Diabetes":
+        diabetes.app()
     if app == "Blood":
         anemia.app()
     if app == "Covid19":
