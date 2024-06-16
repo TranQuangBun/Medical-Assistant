@@ -1,7 +1,5 @@
 import streamlit as st
-from traitlets import link
 import matplotlib.pyplot as plt
-from Authentication import account
 from database import query
 import pandas as pd
 from PIL import Image
@@ -19,7 +17,6 @@ css = """
 def Mark():
 
     st.title('Chào mừng bạn đến :red[BLOOD TEST 🩸]')
-  # account.app()
     with st.expander("CÁC BỆNH CHÚNG TÔI CÓ THỂ DỰ ĐOÁN"):
         marks1, marks2 = st.columns(2, gap='large')
         with marks1:
@@ -43,8 +40,7 @@ def Mark():
     # Cột bên trái
     with right_column:
         st.subheader('📊 :red[BIỂU ĐỒ]')
-        # Dữ liệu mẫu
-        # Dữ liệu mẫu
+
         data = {
             'LYM': [13.4, 17.7],
             'NEUT': [73.7, 73.5],
@@ -75,40 +71,38 @@ def Mark():
 
         # Hàm để vẽ biểu đồ cho nhóm không bệnh
         def plot_non_diseased(df_non_diseased):
-            fig, ax = plt.subplots(figsize=(20, 12))  # Tăng kích thước biểu đồ
+            fig, ax = plt.subplots(figsize=(20, 12))
 
             # Vẽ biểu đồ cho nhóm không bệnh
             df_non_diseased.T.plot(kind='bar', ax=ax, color='blue', alpha=0.6, position=1, width=0.4,
                                    label='Non-Diseased')
 
             # Cài đặt nhãn và tiêu đề
-            ax.set_xlabel('Blood Indices', fontsize=16)  # Tăng kích thước phông chữ nhãn trục X
-            ax.set_ylabel('Values', fontsize=16)  # Tăng kích thước phông chữ nhãn trục Y
-            ax.set_title('Blood Indices of Non-Diseased Individuals', fontsize=20)  # Tăng kích thước phông chữ tiêu đề
-            ax.legend(['Non-Diseased'], fontsize=14)  # Tăng kích thước phông chữ chú giải
+            ax.set_xlabel('Blood Indices', fontsize=16)
+            ax.set_ylabel('Values', fontsize=16)
+            ax.set_title('Blood Indices of Non-Diseased Individuals', fontsize=20)
+            ax.legend(['Non-Diseased'], fontsize=14)
 
-            plt.xticks(rotation=45, fontsize=14)  # Tăng kích thước phông chữ nhãn trục X
-            plt.yticks(fontsize=14)  # Tăng kích thước phông chữ nhãn trục Y
+            plt.xticks(rotation=45, fontsize=14)
+            plt.yticks(fontsize=14)
             st.pyplot(fig)
 
         # Hàm để vẽ biểu đồ cho nhóm bệnh
         def plot_diseased(df_diseased):
-            fig, ax = plt.subplots(figsize=(20, 12))  # Tăng kích thước biểu đồ
+            fig, ax = plt.subplots(figsize=(20, 12))
 
-            # Vẽ biểu đồ cho nhóm bệnh
             df_diseased.T.plot(kind='bar', ax=ax, color='red', alpha=0.6, position=0, width=0.4, label='Diseased')
 
             # Cài đặt nhãn và tiêu đề
-            ax.set_xlabel('Blood Indices', fontsize=16)  # Tăng kích thước phông chữ nhãn trục X
-            ax.set_ylabel('Values', fontsize=16)  # Tăng kích thước phông chữ nhãn trục Y
-            ax.set_title('Blood Indices of Diseased Individuals', fontsize=20)  # Tăng kích thước phông chữ tiêu đề
-            ax.legend(['Diseased'], fontsize=14)  # Tăng kích thước phông chữ chú giải
+            ax.set_xlabel('Blood Indices', fontsize=16)
+            ax.set_ylabel('Values', fontsize=16)
+            ax.set_title('Blood Indices of Diseased Individuals', fontsize=20)
+            ax.legend(['Diseased'], fontsize=14)
 
-            plt.xticks(rotation=45, fontsize=14)  # Tăng kích thước phông chữ nhãn trục X
-            plt.yticks(fontsize=14)  # Tăng kích thước phông chữ nhãn trục Y
+            plt.xticks(rotation=45, fontsize=14)
+            plt.yticks(fontsize=14)
             st.pyplot(fig)
 
-        # Gọi hàm plot_non_diseased và plot_diseased để vẽ hai biểu đồ riêng biệt
         st.header('Người không mắc bệnh')
         plot_non_diseased(df_non_diseased)
         st.header('Người bị bệnh')
@@ -116,12 +110,14 @@ def Mark():
     # Cột bên trái
     with left_column:
         st.subheader('📰 :red[TIN TỨC]')
-        for title, content, image_url, link in news:
-            link_test = link
-            title_test = title
+        for item in news:
+            link_test = item['link']
+            title_test = item['title']
+            image_path = item['image_url']
+            content = item['content']
             st.markdown(f"[**{title_test}**]({link_test})", unsafe_allow_html=False)
-            if image_url:
-                img_path = "Image/" + image_url
+            if image_path:
+                img_path = "Image/" + image_path
                 image = Image.open(img_path)
                 st.image(image, caption=content, use_column_width=True)
 

@@ -1,7 +1,6 @@
 import streamlit as st
 import pickle
 import pandas as pd
-from PIL import Image
 def app():
 
     st.title('Hệ thống tư vấn :green[THUỐC 💊]')
@@ -37,7 +36,7 @@ def app():
     def recommend(medicine):
         medicine_index = medicines[medicines['Drug_Name'] == medicine].index[0]
         distances = similarity[medicine_index]
-        medicines_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+        medicines_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:10]
 
         recommended_medicines = []
         for i in medicines_list:

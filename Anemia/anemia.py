@@ -1,67 +1,29 @@
 from builtins import float
 
 import streamlit as st
-import sklearn
-import pandas as pd
 import numpy as np
-import pickle
 import joblib
-from Authentication import account
-from streamlit_option_menu import option_menu
 from database import query
 
+from streamlit_lottie import st_lottie
+import requests
 
-#def load_model():
-   # with open('')
 def app():
     st.title('Bạn đang dự đoán :red[THIẾU MÁU] 🩸')
-
-    if 'logged_in' not in st.session_state:
-        st.session_state.logged_in = False
-
-    if not st.session_state.logged_in:
-        choice = st.selectbox('Login/Signup', ['Đăng nhập', 'Tạo tài khoản'])
-        if choice == 'Đăng nhập':
-            # Email + Mật khẩu
-            email = st.text_input('Địa chỉ Email', placeholder='Enter your email here ...')
-            password = st.text_input('Mật khẩu', type='password', placeholder='Enter your password here ...')
-
-            if st.button('Đăng nhập'):
-                user = query.verify_credentials(email, password)
-                if user:
-                    # Lưu thông tin người dùng vào session state
-                    st.success(f"Chào mừng, {user['name']}!")
-                    st.balloons()
-                    st.session_state['logged_in'] = {'logged_in': True, 'name': user['name'], 'email': user['email'],'phone': user['phone']}
-
-                else:
-                    st.error("Email hoặc mật khẩu không đúng!")
-
-        elif choice == 'Tạo tài khoản':
-            # Thêm các trường tạo tài khoản ở đây (ví dụ: tên, email, mật khẩu)
-            name = st.text_input('Tên của bạn')
-            email = st.text_input('Địa chỉ Email', placeholder='Enter your email here ...')
-            phone = st.text_input('Số điện thoại')
-            password = st.text_input('Mật khẩu', type='password', placeholder='Enter your password here ...')
-
-            if st.button('Tạo tài khoản'):
-                account.app()
-
-
-    # Nếu người dùng đã đăng nhập, hiển thị thông tin người dùng
-    if st.session_state.logged_in:
-        with st.expander("Thông tin của bạn"):
-            marks1, marks2, marks3 = st.columns(3, gap='large')
-            with marks1:
-                st.info('Người dùng', icon="👤")
-                st.metric(label=st.session_state.logged_in['name'], value='')
-            with marks2:
-                st.info('Số điện thoại', icon="📞")
-                st.metric(label=st.session_state.logged_in['phone'], value='')
-            with marks3:
-                st.info('Số lần test', icon="🧪")
-            #   st.metric(label=user_data['test_count'], value='')
-
+    if 'logged_in' in st.session_state:
+        if st.session_state.logged_in['is_logged']:
+            user = {'name': st.session_state.logged_in['name'], 'phone': st.session_state.logged_in['phone'],
+                    'email': st.session_state.logged_in['email']}
+            with st.expander("Thông tin của bạn"):
+                marks1, marks2, marks3 = st.columns(3, gap='large')
+                with marks1:
+                    st.info(user['name'], icon="👤")
+                with marks2:
+                    st.info(user['phone'], icon="📞")
+                with marks3:
+                    st.info('Số lần test', icon="🧪")
+        else:
+            st.info(":green[Model bạn đang sử dụng có độ chính xác là 93%!] Đăng nhập để sử dụng model chính xác hơn!!")
 
 
     # Chia trang web thành hai cột
@@ -121,38 +83,80 @@ def app():
 
     with predict_button:
         if st.button("Dự đoán bệnh"):
-             model_load = joblib.load('Anemia/model_random_forest_classifier.sav')
-             #model = pickle.load(open('Anemia/model_random_forest_classifier.sav','rb'))
+             model = None
+             if 'logged_in' in st.session_state:
+                 if st.session_state.logged_in['is_logged']:
+                     model = joblib.load('./models/anemia/model_random_forest_classifier.sav')
+                 else:
+                     model = joblib.load('./models/anemia/model_logistic_regression.sav')
 
              input_data = np.array([input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13,input14,input15])
 
-
-
              input_data = [float(x) for x in input_data]
 
-             prediction = model_load.predict([input_data])
+             prediction = model.predict([input_data])
              prediction = [int(x) for x in prediction]
-             query.insert_anemia(input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
+
+             user_id = None
+             if 'logged_in' in st.session_state:
+                 if st.session_state.logged_in['is_logged']:
+                     user_id = st.session_state.logged_in['user_id']
+
+             query.insert_anemia(user_id,input1, input2, input3, input4, input5, input6, input7, input8, input9, input10,
                                  input11, input12, input13, input14, input15, prediction[0])
 
              if prediction[0] == 1:
-                 st.markdown("""
-                                                         <style>
-                                                         .error-box {
-                                                             padding: 10px;
-                                                             border: 2px solid red;
-                                                             border-radius: 5px;
-                                                             background-color: #f8d7da;
-                                                             color: red;
-                                                             font-size: 16px;
-                                                         }
-                                                         </style>
-                                                         <div class="error-box">
-                                                             <h4>⚠️ Mô hình dự đoán bệnh nhân BỊ mắc bệnh.</h4>                      
-                                                         </div>
-                                                     """, unsafe_allow_html=True)
+                 def load_lottie_url(url: str):
+                     r = requests.get(url)
+                     if r.status_code != 200:
+                         return None
+                     return r.json()
+
+                 lottie_animation = load_lottie_url(
+                     "https://lottie.host/11bce142-1605-44a5-be30-3e96c5e02085/vyyX01ROgn.json")
+
+                 col5, col6 = st.columns(2)
+                 with col5:
+                     if lottie_animation:
+                         st_lottie(lottie_animation, height=200, width=200)
+                     else:
+                         st.write("Failed to load animation")
+                 with col6:
+                     st.markdown("""
+                         <style>
+                         .error-box {
+                             padding: 10px;
+                             border: 2px solid red;
+                             border-radius: 5px;
+                             background-color: #f8d7da;
+                             color: red;
+                             font-size: 16px;
+                         }
+                         </style>
+                         <div class="error-box">
+                             <h4>⚠️ Mô hình dự đoán bệnh nhân BỊ mắc bệnh.</h4>                      
+                         </div>
+                     """, unsafe_allow_html=True)
              else:
-                 st.markdown("""
+                 def load_lottie_url(url: str):
+                     r = requests.get(url)
+                     if r.status_code != 200:
+                         return None
+                     return r.json()
+
+                 lottie_animation = load_lottie_url(
+                     "https://lottie.host/724a2c27-29da-48a2-8e64-0ba2a1a31d65/e30ugekdJ7.json")
+
+                 col1, col2 = st.columns(2)
+
+                 with col1:
+                     if lottie_animation:
+                         st_lottie(lottie_animation, height=200, width=200)
+                     else:
+                         st.write("Failed to load animation")
+
+                 with col2:
+                     st.markdown("""
                                    <style>
                                    .success-box {
                                        padding: 10px;
