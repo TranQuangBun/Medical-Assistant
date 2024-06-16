@@ -50,17 +50,6 @@ def get_news():
     else:
         return None
 
-def view_all_data():
-    connection = get_db_connection()
-    if connection:
-        with connection.cursor(dictionary=True) as cursor:
-            cursor.execute('SELECT pcr_date,pcr FROM `covid_blood` ORDER BY `ID` ASC')
-            data = cursor.fetchall()
-            df = pd.DataFrame(data, columns=['pcr_date', 'pcr'])
-            df['pcr_date'] = pd.to_datetime(df['pcr_date'])
-            return df
-    else:
-        return None
 def insert_feedback(user_id,selected_progress, feedback, satisfaction_level):
     connection = get_db_connection()
     if connection:

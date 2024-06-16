@@ -5,7 +5,6 @@ import pandas as pd
 from PIL import Image
 
 news = query.get_news()
-data = query.view_all_data()
 css = """
 <style>
 .image-container {

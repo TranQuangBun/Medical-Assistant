@@ -79,10 +79,7 @@ def app():
 
     # Thêm nút ở giữa phía dưới phần trên
     st.markdown("<br>", unsafe_allow_html=True)  # Thêm khoảng trắng để đẩy nút xuống dưới
-    predict_button = st.columns(3)[1]  # Chia thành 3 cột và chọn cột giữa
-
-    with predict_button:
-        if st.button("Dự đoán bệnh"):
+    if st.button("Dự đoán bệnh"):
              model = None
              if 'logged_in' in st.session_state:
                  if st.session_state.logged_in['is_logged']:
