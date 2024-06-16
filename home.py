@@ -41,72 +41,48 @@ def Mark():
     with right_column:
         st.subheader('📊 :red[BIỂU ĐỒ]')
 
-        data = {
-            'LYM': [13.4, 17.7],
-            'NEUT': [73.7, 73.5],
-            'MONO': [9.5, 7.2],
-            'EOS': [2.9, 0.1],
-            'BASO': [0.5, 0.2],
-            'HGB': [13.2, 14.9],
-            'HCT': [38.5, 42.7],
-            'MCV': [100.8, 82.0],
-            'MCH': [34.7, 28.6],
-            'MCHC': [34.4, 34.9],
-            'RDW': [12.8, 12.5],
-            'PLT': [200.5, 337.0],
-            'MPV': [9.9, 10.1],
-            'diseased': [0, 1]
-        }
+        def plot_anemia():
+            count_1, count_0 = query.count_diseased_anemia()
 
-        # Tạo DataFrame từ dữ liệu
-        df = pd.DataFrame(data)
+            if count_1 is not None and count_0 is not None:
+                labels = ['Người bị bệnh', 'Không bị bệnh']
+                counts = [count_1, count_0]
 
-        # Tách dữ liệu thành hai nhóm: diseased và non-diseased
-        df_diseased = df[df['diseased'] == 1]
-        df_non_diseased = df[df['diseased'] == 0]
+                # Vẽ biểu đồ cột
+                fig, ax = plt.subplots(figsize=(8, 6))
+                ax.bar(labels, counts, color=['blue', 'green'])
+                ax.set_xlabel('Bệnh nhân')
+                ax.set_ylabel('Số lượng')
+                st.info('Biểu đồ số lượng người đã dự đoán của bệnh :red[Thiếu máu] 🩸')
 
-        # Loại bỏ cột 'diseased' để vẽ biểu đồ
-        df_diseased = df_diseased.drop(columns=['diseased'])
-        df_non_diseased = df_non_diseased.drop(columns=['diseased'])
+                # Hiển thị biểu đồ trong streamlit
+                st.pyplot(fig)
+            else:
+                st.write("Không thể lấy được dữ liệu từ database.")
 
-        # Hàm để vẽ biểu đồ cho nhóm không bệnh
-        def plot_non_diseased(df_non_diseased):
-            fig, ax = plt.subplots(figsize=(20, 12))
+        def plot_covid19():
+            count_1, count_0 = query.count_diseased_covid()
 
-            # Vẽ biểu đồ cho nhóm không bệnh
-            df_non_diseased.T.plot(kind='bar', ax=ax, color='blue', alpha=0.6, position=1, width=0.4,
-                                   label='Non-Diseased')
+            if count_1 is not None and count_0 is not None:
+                labels = ['Người bị bệnh', 'Không bị bệnh']
+                counts = [count_1, count_0]
 
-            # Cài đặt nhãn và tiêu đề
-            ax.set_xlabel('Blood Indices', fontsize=16)
-            ax.set_ylabel('Values', fontsize=16)
-            ax.set_title('Blood Indices of Non-Diseased Individuals', fontsize=20)
-            ax.legend(['Non-Diseased'], fontsize=14)
+                # Vẽ biểu đồ cột
+                fig, ax = plt.subplots(figsize=(8, 6))
+                ax.bar(labels, counts, color=['red', 'green'])
+                ax.set_xlabel('Bệnh nhân')
+                ax.set_ylabel('Số lượng')
+                st.info('Biểu đồ số lượng người đã dự đoán của bệnh :green[Covid 19] 🧪')
 
-            plt.xticks(rotation=45, fontsize=14)
-            plt.yticks(fontsize=14)
-            st.pyplot(fig)
+                # Hiển thị biểu đồ trong streamlit
+                st.pyplot(fig)
+            else:
+                st.write("Không thể lấy được dữ liệu từ database.")
 
-        # Hàm để vẽ biểu đồ cho nhóm bệnh
-        def plot_diseased(df_diseased):
-            fig, ax = plt.subplots(figsize=(20, 12))
+        plot_anemia()
+        plot_covid19()
 
-            df_diseased.T.plot(kind='bar', ax=ax, color='red', alpha=0.6, position=0, width=0.4, label='Diseased')
 
-            # Cài đặt nhãn và tiêu đề
-            ax.set_xlabel('Blood Indices', fontsize=16)
-            ax.set_ylabel('Values', fontsize=16)
-            ax.set_title('Blood Indices of Diseased Individuals', fontsize=20)
-            ax.legend(['Diseased'], fontsize=14)
-
-            plt.xticks(rotation=45, fontsize=14)
-            plt.yticks(fontsize=14)
-            st.pyplot(fig)
-
-        st.header('Người không mắc bệnh')
-        plot_non_diseased(df_non_diseased)
-        st.header('Người bị bệnh')
-        plot_diseased(df_diseased)
     # Cột bên trái
     with left_column:
         st.subheader('📰 :red[TIN TỨC]')

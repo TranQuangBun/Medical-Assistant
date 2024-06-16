@@ -106,6 +106,33 @@ def insert_diabetes(user_id,HGB,MCHC,MCH,MCV,MPV,RBC,PLT,RDW,WBC,diseased):
             cursor.execute(sql_query, record)
             connection.commit()
             print("Diabetes inserted successfully")
+
+def count_diseased_anemia():
+    connection = get_db_connection()
+    if connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT SUM(IF(diseased = 1, 1, 0)) AS count_1, SUM(IF(diseased = 0, 1, 0)) AS count_0 FROM anemia_test_results;')
+            result = cursor.fetchone()
+            count_1 = result['count_1']
+            count_0 = result['count_0']
+
+        return count_1, count_0
+    else:
+        return None
+
+def count_diseased_covid():
+    connection = get_db_connection()
+    if connection:
+        with connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT SUM(IF(diseased = 1, 1, 0)) AS count_1, SUM(IF(diseased = 0, 1, 0)) AS count_0 FROM covid_test_results;')
+            result = cursor.fetchone()
+            count_1 = result['count_1']
+            count_0 = result['count_0']
+
+        return count_1, count_0
+    else:
+        return None
+
 def get_user_by_id(id):
     connection = get_db_connection()
     if connection:
